@@ -1,12 +1,9 @@
 const { validationResult } = require('express-validator');
-const { ValidationError } = require('sequelize');
-const ExpressValidatorError = require('../utils/ExpressVlidatorErr');
+const ExpressValidatorError = require('../utils/ExpressValidatorErr');
 
-function validate(req, res, next) {
+module.exports = (req, res, next) => {
     const result = validationResult(req);
     if (result.isEmpty()) return next()
-    
+
     next(new ExpressValidatorError(result));
 }
-
-module.exports = validate;

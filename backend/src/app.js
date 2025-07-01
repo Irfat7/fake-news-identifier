@@ -4,6 +4,7 @@ const routes = require("./routes")
 const dbService = require("./services/db.service");
 const sequelize = require('./config/db');
 const globalErrorHandler = require('./middlewares/errorhandler');
+const responseFormatter = require('./middlewares/responseFormatter');
 
 dbService.connect()
   .then(() => {
@@ -12,6 +13,7 @@ dbService.connect()
     .catch(()=> console.log('Database sync failed'));
     // Database connected successfully
     app.use(express.json());
+    app.use(responseFormatter);
     app.use("/api", routes);
     app.use(globalErrorHandler);
   })

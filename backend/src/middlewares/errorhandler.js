@@ -1,13 +1,11 @@
 const { UniqueConstraintError } = require('sequelize');
-const ExpressValidatorError = require('../utils/ExpressVlidatorErr');
+const ExpressValidatorError = require('../utils/ExpressValidatorErr');
 
-function globalErrorHandler(err, req, res, next) {
+module.exports = (err, req, res, next) => {
     if(err instanceof UniqueConstraintError){
-        return res.send({code: 409, message: err.message})
+        return res.error(409, "Unique constraint violation")
     }
     if(err instanceof ExpressValidatorError){
-        return res.send({code: 422, message: err.message})
+        return res.error(409, err.message);
     }
 }
-
-module.exports = globalErrorHandler
