@@ -14,7 +14,15 @@ const User = sequelize.define('user', {
       msg: "Email already exists!"
     },
   },
-  password: DataTypes.TEXT
+  password: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    validate: {
+      notNull: {
+        msg: "Can not be null",
+      },
+    }
+  }
 }, {
   sequelize,
   timestamps: true,
