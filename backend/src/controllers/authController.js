@@ -1,10 +1,18 @@
+const User = require("../models/user.model");
+
+
 function signin(req, res){
     res.send({code: 200, message: "Login Test"})
 }
 
-function signup(req, res){
+async function signup(req, res, next){
     const {name, email, password} = req.body;
-    res.send({name, email, password});
+    try {
+        const newUser = await User.create({name, email, password});
+        res.send({name, email, password});
+    } catch (error) {
+        next(error)
+    }
 }
 
 module.exports = {
