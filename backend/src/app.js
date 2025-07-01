@@ -8,7 +8,7 @@ dbService.connect()
     // Database connected successfully
     app.use(express.json());
     app.use(express.json());
-    app.use("/api", routes)
+    app.use("/api", routes);
   })
   .catch(err => {
     console.error('Failed to initialize database:', err);
