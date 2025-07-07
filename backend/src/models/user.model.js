@@ -22,6 +22,10 @@ const User = sequelize.define('user', {
         msg: "Can not be null",
       },
     }
+  },
+  verified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 }, {
   sequelize,

@@ -5,6 +5,5 @@ module.exports = (req, res, next)=>{
     res.error = (status=500, message="Something went wrong")=>{
         return res.status(status).json({message})
     }
-
     next();
 }
