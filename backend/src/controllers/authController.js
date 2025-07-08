@@ -1,11 +1,11 @@
+require('dotenv').config()
 const User = require("../models/user.model");
 const catchAsync = require("../utils/catchAsync");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const transporter = require("../utils/email");
-const nodemailer = require('nodemailer');
-require('dotenv').config()
+const emailQueue = require("../queues/emailQueue");
 
 const signToken = (email) => {
     return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -24,17 +24,19 @@ const signin = catchAsync(async (req, res) => {
 const signup = catchAsync(async (req, res) => {
     const { name, email, password } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    await User.create({ name, email, password: hashedPassword });
+    /* const hashedPassword = await bcrypt.hash(password, saltRounds);
+    await User.create({ name, email, password: hashedPassword }); */
 
-    await transporter.sendMail({
-        from: process.env.SMTP_USER,
+    const verifyLink = `http://localhost:5000/api/auth/verify/${signToken(email)}`;
+
+    await emailQueue.add('sendVerification', {
+        from: process.env.GOOGLE_APP_USER,
         to: email,
         subject: "Verify your email",
         text: "Verification mail",
-        html: `<p>Please verify your <a href=http://localhost:5000/api/auth/verify/${signToken(email)}>Email</a></p>`, // HTML body
+        html: `<p>Please verify your email by clicking <a href="${verifyLink}">here</a></p>`,
     });
-    res.success(null);
+    res.success(null, 200, "Verification Mail Will Be Sent");
 })
 
 const verifyToken = catchAsync(async (req, res) => {
