@@ -4,7 +4,6 @@ const catchAsync = require("../utils/catchAsync");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
-const transporter = require("../utils/email");
 const emailQueue = require("../queues/emailQueue");
 
 const signToken = (email) => {
@@ -17,15 +16,15 @@ const signin = catchAsync(async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
         res.error(404, "User does not exist or wrong credentials!")
     }
-    const token = signToken(email);
-    res.success(token);
+    /* const token = signToken(email); */
+    res.success(user);
 })
 
 const signup = catchAsync(async (req, res) => {
     const { name, email, password } = req.body;
 
-    /* const hashedPassword = await bcrypt.hash(password, saltRounds);
-    await User.create({ name, email, password: hashedPassword }); */
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    await User.create({ name, email, password: hashedPassword });
 
     const verifyLink = `http://localhost:5000/api/auth/verify/${signToken(email)}`;
 

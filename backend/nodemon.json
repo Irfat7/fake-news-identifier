@@ -1,5 +1,0 @@
-{
-  "require": "dotenv/config",
-  "watch": ["src/queues/emailWorker.js"],
-  "exec": "node src/index.js src/queues/emailWorker.js"
-}
