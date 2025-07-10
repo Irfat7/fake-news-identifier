@@ -25,6 +25,13 @@ services:
       - ./backend/.env
     depends_on:
       - redis
+  flask-ml:
+    build: ./flask-ml
+    volumes:
+      - ./flask-ml:/app
+    ports:
+      - "5001:5001"
+    restart: always
 
   postgres:
     image: postgres:14
