@@ -46,7 +46,7 @@ const signup = catchAsync(async (req, res) => {
     const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ where: { email } });
-    if (!existingUser.verified) {
+    if (existingUser && !existingUser.verified) {
         await sendVerificationMail(email);
         return res.error(403, "Email not verified. Verification mail sent.");
     }
