@@ -1,16 +1,29 @@
 const axios = require('axios');
 const catchAsync = require("../utils/catchAsync")
 require('dotenv').config()
+const jwt = require('jsonwebtoken');
 
 const predictNews = catchAsync(async (req, res, next) => {
     const flaskUrl = process.env.FLASK_URL;
-
+    const news = req.body.news;
     try {
         const response = await axios.post(`${flaskUrl}/predict`, {
-            news: req.body.news
+            news
         });
 
-        return res.success(response.data);
+        const token = jwt.sign({
+            news,
+            prediction: response.data.prediction,
+            timestamp: Date.now()
+        },
+            process.env.JWT_SECRET,
+            { expiresIn: '10m' }
+        );
+
+        return res.success({
+            ...response.data,
+            token
+        });
 
     } catch (err) {
         if (err.response) {

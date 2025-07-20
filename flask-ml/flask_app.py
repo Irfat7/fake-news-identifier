@@ -35,5 +35,5 @@ def predict():
 
     return jsonify({
         "cleaned_news": cleaned_text,
-        "prediction": "FAKE or REAL (replace with actual model)"
+        "prediction": 0
     })

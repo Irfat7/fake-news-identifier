@@ -6,5 +6,6 @@ const validate = require("../middlewares/validate");
 const router = express.Router()
 
 router.post("/predict"/* , authMiddleware */, newsValidator, validate, predictNews);
+router.post("/feedback"/* , authMiddleware */, newsValidator, validate, predictNews);
 
 module.exports = router
