@@ -37,6 +37,11 @@ const predictNews = catchAsync(async (req, res, next) => {
     }
 });
 
+const storeFeedback = catchAsync(async (req, res) => {
+    
+})
+
 module.exports = {
-    predictNews
+    predictNews,
+    storeFeedback
 }
