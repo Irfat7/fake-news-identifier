@@ -20,7 +20,20 @@ def clean_with_spacy_pipe(text):
     ]
     return " ".join(tokens)
 
-@app.route("/predict", methods=["GET"])
+@app.route("/predict", methods=["POST"])
 def predict():
-    # add preprocessing here
-    return jsonify({"prediction": "SIU1234"})
+    data = request.get_json()
+    if not data or "news" not in data:
+        return jsonify({"error": "Missing 'news' in request body"}), 400
+
+    raw_text = data["news"]
+    cleaned_text = clean_with_spacy_pipe(raw_text)
+
+    # Example placeholder response - replace later
+    # vector = vectorizer.transform([cleaned_text])
+    # prediction = model.predict(vector)[0]
+
+    return jsonify({
+        "cleaned_news": cleaned_text,
+        "prediction": "FAKE or REAL (replace with actual model)"
+    })
