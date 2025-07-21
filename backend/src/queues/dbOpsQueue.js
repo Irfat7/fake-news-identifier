@@ -1,6 +1,6 @@
 const { Queue } = require('bullmq');
 const connection = require('../config/redisConnection');
 
-const emailQueue = new Queue('emailQueue', { connection });
+const dbOpsQueue = new Queue('db-ops-queue', { connection });
 
-module.exports = emailQueue;
+module.exports = dbOpsQueue;

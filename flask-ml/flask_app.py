@@ -35,5 +35,5 @@ def predict():
 
     return jsonify({
         "cleaned_news": cleaned_text,
-        "prediction": 0
+        "prediction": True
     })

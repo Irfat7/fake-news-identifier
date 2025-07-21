@@ -2,6 +2,7 @@ const axios = require('axios');
 const catchAsync = require("../utils/catchAsync")
 require('dotenv').config()
 const jwt = require('jsonwebtoken');
+const dbOpsQueue = require('../queues/dbOpsQueue');
 
 const predictNews = catchAsync(async (req, res, next) => {
     const flaskUrl = process.env.FLASK_URL;
@@ -19,6 +20,11 @@ const predictNews = catchAsync(async (req, res, next) => {
             process.env.JWT_SECRET,
             { expiresIn: '10m' }
         );
+
+        await dbOpsQueue.add('db-task', {
+            task: "store-news",
+            payload: { news, prediction: response.data.prediction }
+        });
 
         return res.success({
             ...response.data,
@@ -38,7 +44,8 @@ const predictNews = catchAsync(async (req, res, next) => {
 });
 
 const storeFeedback = catchAsync(async (req, res) => {
-    
+
+
 })
 
 module.exports = {

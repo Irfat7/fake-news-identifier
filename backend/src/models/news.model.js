@@ -10,7 +10,7 @@ const News = sequelize.define('news', {
     news: {
         type: DataTypes.TEXT,
         unique: {
-            msg: "Email already exists!"
+            msg: "News already exists!"
         },
         validate: {
             len: {
