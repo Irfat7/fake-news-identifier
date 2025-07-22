@@ -3,6 +3,8 @@ const catchAsync = require("../utils/catchAsync")
 require('dotenv').config()
 const jwt = require('jsonwebtoken');
 const dbOpsQueue = require('../queues/dbOpsQueue');
+const Feedback = require('../models/feedback.model');
+const News = require('../models/news.model');
 
 const predictNews = catchAsync(async (req, res, next) => {
     const flaskUrl = process.env.FLASK_URL;
@@ -14,7 +16,8 @@ const predictNews = catchAsync(async (req, res, next) => {
 
         console.log(response.data.cleaned_news)
         const token = jwt.sign({
-            news:response.data.cleaned_news,
+            news: response.data.cleaned_news,
+            userId: req.user.userId,
             prediction: response.data.prediction,
             timestamp: Date.now()
         },
@@ -45,7 +48,19 @@ const predictNews = catchAsync(async (req, res, next) => {
 });
 
 const storeFeedback = catchAsync(async (req, res) => {
-    res.success(null);
+    const { news, label } = req.body
+    const newsEntry = await News.findOne({ where: { news } });
+
+    if (!newsEntry) {
+        return res.error(404, "News entry not found.");
+    }
+
+    await Feedback.upsert({
+        userId: req.user.userId,
+        newsId: newsEntry.id,
+        label
+    });
+    res.success(null, 200, "Feedback submitted successfully");
 })
 
 module.exports = {
