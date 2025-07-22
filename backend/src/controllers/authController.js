@@ -6,8 +6,8 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const emailQueue = require("../queues/emailQueue");
 
-const signToken = (email) => {
-    return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+const signToken = (email, userId = null) => {
+    return jwt.sign({ userId, email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
 const sendVerificationMail = async (email) => {
@@ -32,13 +32,15 @@ const signin = catchAsync(async (req, res) => {
         await sendVerificationMail(email);
         return res.error(403, "Email not verified. Verification mail sent.");
     }
-    const token = signToken(email);
+
+    const token = signToken(email, existingUser.id);
     res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Lax',
         maxAge: 60 * 60 * 1000
     });
+    console.log(token)
     return res.success(null, 200, "Login successful");
 })
 

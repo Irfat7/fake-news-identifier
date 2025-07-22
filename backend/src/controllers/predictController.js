@@ -12,8 +12,9 @@ const predictNews = catchAsync(async (req, res, next) => {
             news
         });
 
+        console.log(response.data.cleaned_news)
         const token = jwt.sign({
-            news,
+            news:response.data.cleaned_news,
             prediction: response.data.prediction,
             timestamp: Date.now()
         },
@@ -23,7 +24,7 @@ const predictNews = catchAsync(async (req, res, next) => {
 
         await dbOpsQueue.add('db-task', {
             task: "store-news",
-            payload: { news, prediction: response.data.prediction }
+            payload: { news: response.data.cleaned_news, prediction: response.data.prediction }
         });
 
         return res.success({
@@ -44,8 +45,7 @@ const predictNews = catchAsync(async (req, res, next) => {
 });
 
 const storeFeedback = catchAsync(async (req, res) => {
-
-
+    res.success(null);
 })
 
 module.exports = {

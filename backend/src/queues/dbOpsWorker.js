@@ -9,8 +9,7 @@ sequelize.authenticate()
     .catch(err => console.error('DB connection failed in worker:', err));
 
 const dbOpsWorker = new Worker('db-ops-queue', async job => {
-    const { task, payload } = job;
-
+    const { task, payload } = job.data;
     switch (task) {
         case "store-news":
             await News.create(payload);

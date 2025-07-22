@@ -6,7 +6,7 @@ const validate = require("../middlewares/validate");
 const verifyPredictionToken = require("../middlewares/verifyPredictionToken");
 const router = express.Router()
 
-router.post("/predict"/* , authMiddleware */, newsValidator, validate, predictNews);
+router.post("/predict", authMiddleware, newsValidator, validate, predictNews);
 router.post(
     "/feedback",
     feedbackValidator,
