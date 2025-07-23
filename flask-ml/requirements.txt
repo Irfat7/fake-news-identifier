@@ -2,3 +2,6 @@ Flask
 scikit-learn
 joblib
 spacy
+python-dotenv
+sqlalchemy
+psycopg2-binary
