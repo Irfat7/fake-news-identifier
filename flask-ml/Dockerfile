@@ -18,7 +18,7 @@ COPY . .
 EXPOSE 5001
 
 # Environment variable for Flask
-ENV FLASK_APP=flask_app.py
+ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=5001
 
