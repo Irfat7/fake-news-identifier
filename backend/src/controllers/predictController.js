@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const dbOpsQueue = require('../queues/dbOpsQueue');
 const Feedback = require('../models/feedback.model');
 const News = require('../models/news.model');
+const { Op } = require('sequelize');
+const MAX_FEEDBACKS_PER_DAY = 5
 
 const predictNews = catchAsync(async (req, res, next) => {
     const flaskUrl = process.env.FLASK_URL;
@@ -49,6 +51,23 @@ const predictNews = catchAsync(async (req, res, next) => {
 
 const storeFeedback = catchAsync(async (req, res) => {
     const { news, label } = req.body
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const feedbackCount = await Feedback.count({
+        where: {
+            userId: req.user.userId,
+            createdAt: {
+                [Op.gte]: startOfDay,
+            },
+        },
+    });
+
+    if (feedbackCount >= MAX_FEEDBACKS_PER_DAY) {
+        return res.error(429, "You’ve reached your daily feedback limit. Try again tomorrow.")
+    }
+
     const newsEntry = await News.findOne({ where: { news } });
 
     if (!newsEntry) {

@@ -4,58 +4,6 @@ from utils.preprocess import clean_with_spacy_pipe
 FLASK_URL = ("http://localhost:5001/predict")
 
 # Sample test data: 25 real, 25 fake
-""" test_data = [
-    {"news": "National library digitizes rare manuscripts.", "expected_label": 1},
-    {"news": "New species of unicorn discovered in forest.", "expected_label": 0},
-    {"news": "Government announces budget for next fiscal year.", "expected_label": 1},
-    {"news": "Aliens spotted helping in earthquake rescue.", "expected_label": 0},
-    {"news": "Prime Minister addresses UN climate conference.", "expected_label": 1},
-    {"news": "Scientists develop vaccine for rare tropical disease.", "expected_label": 1},
-    {"news": "City declares Monday as no-electricity day.", "expected_label": 0},
-    {"news": "National Museum to host historical artifact exhibition.", "expected_label": 1},
-    {"news": "Man claims time travel after falling into river.", "expected_label": 0},
-    {"news": "University introduces AI courses in curriculum.", "expected_label": 1},
-    {"news": "NASA rover sends back images from Mars.", "expected_label": 1},
-    {"news": "Magnetic bracelet cures diabetes instantly.", "expected_label": 0},
-    {"news": "Economy grows by 5% in the last quarter.", "expected_label": 1},
-    {"news": "Fake meteor explosion caught on city CCTV.", "expected_label": 0},
-    {"news": "Rainwater harvesting becomes compulsory in city.", "expected_label": 1},
-    {"news": "Banana peel turns into clean energy source.", "expected_label": 0},
-    {"news": "Tech company releases affordable smartphones.", "expected_label": 1},
-    {"news": "Magic stone predicts winning lottery numbers.", "expected_label": 0},
-    {"news": "University research wins international recognition.", "expected_label": 1},
-    {"news": "Dragon sighted above mountains in Nepal.", "expected_label": 0},
-    {"news": "Teachers demand better facilities nationwide.", "expected_label": 1},
-    {"news": "Government to build eco-friendly housing project.", "expected_label": 1},
-    {"news": "Talking dogs discovered in abandoned lab.", "expected_label": 0},
-    {"news": "Bank introduces AI fraud detection system.", "expected_label": 1},
-    {"news": "Water turns into wine in local church tap.", "expected_label": 0},
-    {"news": "Flood response teams deployed ahead of storm.", "expected_label": 1},
-    {"news": "Invisibility cloak to be sold next year.", "expected_label": 0},
-    {"news": "New expressway reduces travel time by 40%.", "expected_label": 1},
-    {"news": "Solar-powered drones to assist in deliveries.", "expected_label": 1},
-    {"news": "Man grows third arm after yoga retreat.", "expected_label": 0},
-    {"news": "Hospitals receive modern life-saving equipment.", "expected_label": 1},
-    {"news": "Ancient alien statue found in farmer’s field.", "expected_label": 0},
-    {"news": "School introduces coding from grade 1.", "expected_label": 1},
-    {"news": "Volcano eruption creates new island overnight.", "expected_label": 1},
-    {"news": "Glass of milk prevents all diseases, says guru.", "expected_label": 0},
-    {"news": "Election commission introduces biometric voting.", "expected_label": 1},
-    {"news": "Invisible man arrested in downtown mall.", "expected_label": 0},
-    {"news": "Farmers get subsidies for smart irrigation.", "expected_label": 1},
-    {"news": "Lake turns pink after full moon prayers.", "expected_label": 0},
-    {"news": "Students win global robotics championship.", "expected_label": 1},
-    {"news": "Time machine parts sold on eBay.", "expected_label": 0},
-    {"news": "Wildlife population increases after conservation efforts.", "expected_label": 1},
-    {"news": "Cure for aging found in Himalayan rock.", "expected_label": 0},
-    {"news": "Scientists launch biodegradable plastic alternative.", "expected_label": 1},
-    {"news": "Alien crop circle found in rice field.", "expected_label": 0},
-    {"news": "Tech startups boom after government grants.", "expected_label": 1},
-    {"news": "Eagle carries off small car in highway incident.", "expected_label": 0},
-    {"news": "Electric buses now serve rural areas.", "expected_label": 1},
-    {"news": "Fishermen catch ancient sea monster.", "expected_label": 0}
-]
- """
 
 test_data = [
     {
