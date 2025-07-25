@@ -1,15 +1,25 @@
 import joblib
+import os
+import numpy as np
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import SGDClassifier
 from utils.preprocess import clean_with_spacy_pipe
-from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
+
+# Paths
+model_path = "./model/fake_news_model.pkl"
+vec_path = "./model/tfidf_vectorizer.pkl"
+
+# If model/vectorizer not found, skip training
+if not os.path.exists(model_path) or not os.path.exists(vec_path):
+    print("❌ Model or vectorizer not found. Skipping training.")
+    exit()
 
 # Load feedback + news data
 with engine.connect() as conn:
@@ -20,19 +30,20 @@ with engine.connect() as conn:
     """))
     rows = result.fetchall()
 
-print(rows)
+texts = [clean_with_spacy_pipe(row[0]) for row in rows]
+labels = [0 if row[1] == False else 1 for row in rows]
 
-""" #texts = [clean_with_spacy_pipe(row[0]) for row in rows]
-labels = [row[1] for row in rows]
 
-# Train model
-vectorizer = TfidfVectorizer()
-X = vectorizer.fit_transform(texts)
-model = LogisticRegression()
-model.fit(X, labels)
+# Load model/vectorizer
+model = joblib.load(model_path)
+vectorizer = joblib.load(vec_path)
+print("🔁 Loaded previous model and vectorizer.")
+
+X = vectorizer.transform(texts)
+model.partial_fit(X, labels)
 
 # Save updated model and vectorizer
-joblib.dump(model, "model/model.pkl")
-joblib.dump(vectorizer, "model/vectorizer.pkl") """
+joblib.dump(model, model_path)
+joblib.dump(vectorizer, vec_path)
 
-print("✅ Model retrained and saved.")
+print("✅ Model updated and saved.")

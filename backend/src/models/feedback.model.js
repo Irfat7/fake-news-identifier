@@ -20,7 +20,11 @@ const Feedback = sequelize.define('feedback', {
         validate: {
             notNull: { msg: 'Label cannot be null.' },
         }
-    }
+    },
+    used_in_training: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
 }, {
     sequelize,
     timestamps: true,     // Tracks when feedback was given

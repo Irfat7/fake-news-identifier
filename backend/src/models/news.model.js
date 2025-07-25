@@ -9,13 +9,10 @@ const News = sequelize.define('news', {
     },
     news: {
         type: DataTypes.TEXT,
-        unique: {
-            msg: "News already exists!"
-        },
         validate: {
             len: {
-                args: [10, 1000],
-                msg: "News must be between 10 and 1000 characters."
+                args: [10, 10000],
+                msg: "News must be between 10 and 10000 characters."
             }
         }
     },
@@ -27,7 +24,7 @@ const News = sequelize.define('news', {
                 msg: "Prediction can not be null",
             },
         }
-    },
+    }
 }, {
     sequelize,
     timestamps: true,
