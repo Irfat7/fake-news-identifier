@@ -1,10 +1,7 @@
 import requests
-import json
 from utils.preprocess import clean_with_spacy_pipe
 
-FLASK_URL = (
-    "http://localhost:5001/predict"  # Adjust if running on Docker or different port
-)
+FLASK_URL = ("http://localhost:5001/predict")
 
 # Sample test data: 25 real, 25 fake
 """ test_data = [
@@ -497,8 +494,6 @@ for i, item in enumerate(test_data, 1):
         wrong += 1
 
 print("\n✅ Testing complete:")
-""" with open("feedback_2.txt", "w", encoding="utf-8") as f:
-    f.write(str(prediction_list)) """
 print(
     f"Total: {len(test_data)}, Correct: {correct}, Incorrect: {wrong}, Accuracy: {correct / len(test_data):.2%}"
 )

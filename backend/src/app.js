@@ -10,7 +10,7 @@ require('./models/news.model');
 
 dbService.connect()
   .then(() => {
-    sequelize.sync({ force: true })
+    sequelize.sync({ alter: true })
       .then(() => console.log('Database synced'))
       .catch(() => console.log('Database sync failed'));
     // Database connected successfully

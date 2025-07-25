@@ -1,4 +1,3 @@
-# test_insert_feedback.py
 import os
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
@@ -12,60 +11,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 
-# Sample test data: list of tuples (news, label)
-""" news_feedback_samples = [
-    ("national library digitize rare manuscript", 1, 1),
-    ("new specie unicorn discover forest", 1, 0),
-    ("government announce budget fiscal year", 0, 1),
-    ("alien spot help earthquake rescue", 1, 0),
-    ("prime minister address un climate conference", 1, 1),
-    ("scientist develop vaccine rare tropical disease", 1, 1),
-    ("city declare monday electricity day", 0, 0),
-    ("national museum host historical artifact exhibition", 1, 1),
-    ("man claim time travel fall river", 1, 0),
-    ("university introduce ai course curriculum", 1, 1),
-    ("nasa rover send image mars", 1, 1),
-    ("magnetic bracelet cure diabete instantly", 1, 0),
-    ("economy grow 5 quarter", 1, 1),
-    ("fake meteor explosion catch city cctv", 1, 0),
-    ("rainwater harvesting compulsory city", 0, 1),
-    ("banana peel turn clean energy source", 1, 0),
-    ("tech company release affordable smartphone", 1, 1),
-    ("magic stone predict win lottery number", 1, 0),
-    ("university research win international recognition", 1, 1),
-    ("dragon sight mountain nepal", 1, 0),
-    ("teacher demand well facility nationwide", 1, 1),
-    ("government build eco friendly housing project", 1, 1),
-    ("talk dog discover abandon lab", 1, 0),
-    ("bank introduce ai fraud detection system", 1, 1),
-    ("water turn wine local church tap", 1, 0),
-    ("flood response team deploy ahead storm", 1, 1),
-    ("invisibility cloak sell year", 1, 0),
-    ("new expressway reduce travel time 40", 1, 1),
-    ("solar power drone assist delivery", 1, 1),
-    ("man grow arm yoga retreat", 1, 0),
-    ("hospital receive modern life save equipment", 1, 1),
-    ("ancient alien statue find farmer field", 1, 0),
-    ("school introduce code grade 1", 1, 1),
-    ("volcano eruption create new island overnight", 1, 1),
-    ("glass milk prevent disease say guru", 0, 0),
-    ("election commission introduce biometric voting", 0, 1),
-    ("invisible man arrest downtown mall", 1, 0),
-    ("farmer subsidy smart irrigation", 1, 1),
-    ("lake turn pink moon prayer", 1, 0),
-    ("student win global robotic championship", 1, 1),
-    ("time machine part sell ebay", 1, 0),
-    ("wildlife population increase conservation effort", 1, 1),
-    ("cure aging find himalayan rock", 1, 0),
-    ("scientist launch biodegradable plastic alternative", 1, 1),
-    ("alien crop circle find rice field", 1, 0),
-    ("tech startup boom government grant", 1, 1),
-    ("eagle carry small car highway incident", 1, 0),
-    ("electric bus serve rural area", 1, 1),
-    ("fisherman catch ancient sea monster", 1, 0),
-]
- """
-
+# Sample test data: list of tuples (news, prediction, label)
 news_feedback_samples = [
     (
         "trump viciously attack reporter corner deny tell comey leave flynn video donald trump shut reporter try lie scandal early today trump absolutely disastrous press conference wake russia scandal blow day press conference peter baker new york times try trump s insight investigation michael flynn trump basically lose meltdown baker start prime trump light busy news week lot people like couple thing chance record trump avoid question russia flynn moment edge seat wait come baker continue time urge fbi director james comey way shape form close investigation michael flynn trump s response cowardly interrupt baker barely wait reporter finish sentence trump snap baker question baker ask trump think s worthy criminal charge impeachment trump respond think totally ridiculous everybody think obviously trump ignore fact americans want hell white house believe s guilty watch trump lash baker question president trump ask tell comey stand russia probe pic.twitter.com/jsicps4rt7 pbs newshour @newshour 18 2017clearly trump intention mend relationship press feature image mark wilson getty image",
@@ -594,7 +540,7 @@ with engine.connect() as conn:
         )
 
         # Insert feedback
-        userId = "6574f6fb-61c8-41d6-8e2f-06e84a54230c"
+        userId = "8065a1a5-904a-4dc9-86d2-d646e76c98e0"
         now = datetime.now(timezone.utc)
         createdAt = now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] + "+00"
         insert_feedback = text(

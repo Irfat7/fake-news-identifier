@@ -21,18 +21,23 @@ if not os.path.exists(model_path) or not os.path.exists(vec_path):
     print("❌ Model or vectorizer not found. Skipping training.")
     exit()
 
-# Load feedback + news data
+# Load only unused feedback
 with engine.connect() as conn:
     result = conn.execute(text("""
-        SELECT n.news, f.label
+        SELECT f."userId", f."newsId", n.news, f.label
         FROM feedbacks f
         JOIN news n ON f."newsId" = n."id"
+        WHERE f.used_in_training = false
     """))
     rows = result.fetchall()
 
-texts = [clean_with_spacy_pipe(row[0]) for row in rows]
-labels = [0 if row[1] == False else 1 for row in rows]
+if not rows:
+    print("ℹ️ No new feedback to train on. Exiting.")
+    exit()
 
+# Preprocess text
+texts = [clean_with_spacy_pipe(row[2]) for row in rows]
+labels = [1 if row[3] else 0 for row in rows]
 
 # Load model/vectorizer
 model = joblib.load(model_path)
@@ -42,8 +47,18 @@ print("🔁 Loaded previous model and vectorizer.")
 X = vectorizer.transform(texts)
 model.partial_fit(X, labels)
 
-# Save updated model and vectorizer
+# Save updated model
 joblib.dump(model, model_path)
 joblib.dump(vectorizer, vec_path)
-
 print("✅ Model updated and saved.")
+
+# Mark feedbacks as used
+with engine.begin() as conn:
+    for row in rows:
+        conn.execute(text("""
+            UPDATE feedbacks
+            SET used_in_training = true
+            WHERE "userId" = :user_id AND "newsId" = :news_id
+        """), {"user_id": row[0], "news_id": row[1]})
+
+print("✅ Feedbacks marked as used.")
