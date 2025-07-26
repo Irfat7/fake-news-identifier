@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import joblib
 from utils.preprocess import clean_with_spacy_pipe
 from train_model import run_training
+from middlewares.authMiddleware import token_required
 
 app = Flask(__name__)
 
@@ -10,6 +11,7 @@ vectorizer = joblib.load("./model/tfidf_vectorizer.pkl")
 
 
 @app.route("/predict", methods=["POST"])
+@token_required
 def predict():
     if not request.is_json:
         return jsonify({"error": "Content-Type must be application/json"}), 415
