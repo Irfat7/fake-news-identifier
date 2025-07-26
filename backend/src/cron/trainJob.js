@@ -2,7 +2,7 @@ const axios = require('axios');
 const cron = require('node-cron');
 require('dotenv').config()
 
-cron.schedule('0 4 * * 0', async () => {
+cron.schedule('0 4 * * 6', async () => {
     console.log("📦 Running training job...");
     try {
         const response = await axios.post(`${process.env.FLASK_URL}/train`);

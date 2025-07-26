@@ -21,6 +21,8 @@ EXPOSE 5001
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV FLASK_RUN_PORT=5001
+# No print buffering
+ENV PYTHONUNBUFFERED=1
 
 # Run the Flask app (reload made the hotreload available )
 CMD ["flask", "run", "--reload"]
