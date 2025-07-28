@@ -8,15 +8,16 @@ const News = require('../models/news.model');
 const CircuitBreaker = require('../utils/circuitBreaker');
 const { Op } = require('sequelize');
 const crypto = require('crypto');
-const { LRUCache } = require('lru-cache')
+const NodeCache = require('node-cache');
 const flaskClient = require('../services/flaskClient');
 
 const MAX_FEEDBACKS_PER_DAY = 5;
 
-const newsCache = new LRUCache({
-    max: 500,
-    ttl: 1000 * 60 * 10,
-})
+const newsCache = new NodeCache({
+    stdTTL: 600, // 10 minutes cache
+    checkperiod: 120, // Check for expired keys every 2 minutes
+    maxKeys: 1000 // Limit cache size
+});
 
 const createCacheKey = (news) => {
     return crypto.createHash('md5').update(news.toLowerCase().trim()).digest('hex');
