@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Github, Globe } from 'lucide-react';
 import AuthForm from './components/AuthForm';
 import Header from './components/Header';
@@ -16,7 +16,6 @@ function App() {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<PredictionResultType | null>(null);
-  const [currentNewsText, setCurrentNewsText] = useState('');
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isEmailVerificationModalOpen, setIsEmailVerificationModalOpen] = useState(false);
   const [errorModal, setErrorModal] = useState({ isOpen: false, title: '', message: '' });
@@ -55,7 +54,6 @@ function App() {
   const handlePrediction = async (newsText: string) => {
     setIsLoading(true);
     setResult(null);
-    setCurrentNewsText(newsText);
 
     try {
       const response = await predictNews(newsText);
@@ -103,7 +101,6 @@ function App() {
   const handleLogout = () => {
     setUser(null);
     setResult(null);
-    setCurrentNewsText('');
     addToast('Successfully signed out', 'info');
   };
 
