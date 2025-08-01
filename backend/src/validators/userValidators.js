@@ -8,7 +8,7 @@ const createUserValidator = [
 
 const signinValidator = [
   body('email').trim().isEmail().withMessage('Valid email is required'),
-  body('password').trim().isLength({ min: 6 }).withMessage('Password must be 6+ chars')
+  body('password').trim().isLength({ min: 6 }).withMessage('Wrong password or email')
 ];
 
 module.exports = {

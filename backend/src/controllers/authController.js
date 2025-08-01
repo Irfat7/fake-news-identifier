@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const User = require("../models/user.model");
 const catchAsync = require("../utils/catchAsync");
 const bcrypt = require('bcrypt');
@@ -20,14 +20,17 @@ const sendVerificationMail = async (email) => {
         text: "Verification mail",
         html: `<p>Please verify your email by clicking <a href="${verifyLink}">here</a></p>`,
     });
-}
+};
 
+// ======================= SIGN IN ==========================
 const signin = catchAsync(async (req, res) => {
     const { email, password } = req.body;
     const existingUser = await User.findOne({ where: { email } });
+
     if (!existingUser || !(await bcrypt.compare(password, existingUser.password))) {
-        return res.error(404, "User does not exist or wrong credentials!")
+        return res.error(404, "User does not exist or wrong credentials!");
     }
+
     if (!existingUser.verified) {
         await sendVerificationMail(email);
         return res.error(403, "Email not verified. Verification mail sent.");
@@ -38,27 +41,38 @@ const signin = catchAsync(async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Lax',
-        maxAge: 60 * 60 * 1000
+        maxAge: 60 * 60 * 1000 // 1 hour
     });
-    console.log(token)
-    return res.success(null, 200, "Login successful");
-})
 
+    return res.success(
+        { token, user: { id: existingUser.id, email: existingUser.email } },
+        200,
+        "Login successful"
+    );
+});
+
+// ======================= SIGN UP ==========================
 const signup = catchAsync(async (req, res) => {
     const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ where: { email } });
-    if (existingUser && !existingUser.verified) {
-        await sendVerificationMail(email);
-        return res.error(403, "Email not verified. Verification mail sent.");
+
+    if (existingUser) {
+        if (!existingUser.verified) {
+            await sendVerificationMail(email);
+            return res.success({ mail_sent: true, reason: "resend" }, 200, "Email not verified. Verification mail resent.");
+        }
+        return res.error(409, "Email already in use.");
     }
+
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     await User.create({ name, email, password: hashedPassword });
 
     await sendVerificationMail(email);
-    return res.success(null, 200, "Verification Mail Will Be Sent");
-})
+    return res.success({ mail_sent: true }, 200, "Verification mail sent.");
+});
 
+// ======================= VERIFY TOKEN FROM LINK ==========================
 const verifyToken = catchAsync(async (req, res) => {
     const decoded = jwt.verify(req.params.token, process.env.JWT_SECRET);
     const { email } = decoded;
@@ -72,9 +86,29 @@ const verifyToken = catchAsync(async (req, res) => {
     return res.success(null, 200, "Email verified successfully.");
 });
 
+// ======================= VERIFY ACCESS TOKEN ==========================
+const verify = catchAsync(async (req, res) => {
+    const authHeader = req.headers.authorization;
+    console.log(authHeader)
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.error(401, "Unauthorized: No token provided.");
+    }
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    return res.success({
+        user: {
+            id: decoded.userId,
+            email: decoded.email
+        }
+    }, 200, "Token is valid.");
+});
 
 module.exports = {
     signin,
     signup,
-    verifyToken
-}
+    verifyToken,
+    verify
+};

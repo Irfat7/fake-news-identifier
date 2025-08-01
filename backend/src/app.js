@@ -5,6 +5,7 @@ const dbService = require("./services/db.service");
 const sequelize = require('./config/db');
 const globalErrorHandler = require('./middlewares/errorhandler');
 const responseFormatter = require('./middlewares/responseFormatter');
+const cors = require('cors');
 require('./models/user.model');
 require('./models/news.model');
 
@@ -14,6 +15,10 @@ dbService.connect()
       .then(() => console.log('Database synced'))
       .catch(() => console.log('Database sync failed'));
     // Database connected successfully
+    app.use(cors({
+      origin: 'http://localhost:5173', // your frontend's URL
+      credentials: true               // if you're using cookies or auth headers
+    }));
     app.use(express.json());
     app.use(responseFormatter);
     app.use("/api", routes);
