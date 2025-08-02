@@ -10,6 +10,7 @@ const { Op } = require('sequelize');
 const crypto = require('crypto');
 const { LRUCache } = require('lru-cache')
 const flaskClient = require('../services/flaskClient');
+const { totalPredictions, predictionLatency, predictionLabelCount, feedbackTotal } = require('../utils/metrics');
 
 const MAX_FEEDBACKS_PER_DAY = 5;
 
@@ -25,6 +26,7 @@ const createCacheKey = (news) => {
 const flaskCircuitBreaker = new CircuitBreaker(5, 30000); // 5 failures, 30s timeout
 
 const predictNews = catchAsync(async (req, res, next) => {
+    const start = Date.now();
     const news = req.body.news;
     const cacheKey = createCacheKey(news);
 
@@ -50,6 +52,10 @@ const predictNews = catchAsync(async (req, res, next) => {
             }
         }).catch(err => console.error('Queue error:', err));
 
+
+        predictionLabelCount.inc({ label: cachedResult.prediction })
+        predictionLatency.observe((Date.now() - start) / 1000);
+        totalPredictions.inc()
         return res.success({
             ...cachedResult,
             token,
@@ -107,6 +113,9 @@ const predictNews = catchAsync(async (req, res, next) => {
             removeOnFail: 50, // Keep only last 50 failed jobs
         }).catch(err => console.error('Queue error:', err));
 
+        predictionLabelCount.inc({ label: response.data.prediction })
+        predictionLatency.observe((Date.now() - start) / 1000);
+        totalPredictions.inc()
         return res.success({
             ...predictionResult,
             token
@@ -174,6 +183,7 @@ const storeFeedback = catchAsync(async (req, res) => {
             label
         });
 
+        feedbackTotal.inc();
         res.success(null, 200, "Feedback submitted successfully");
     } catch (error) {
         console.error('Feedback storage error:', error);

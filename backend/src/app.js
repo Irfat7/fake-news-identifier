@@ -8,12 +8,13 @@ const responseFormatter = require('./middlewares/responseFormatter');
 const cors = require('cors');
 const httpLogger = require('./middlewares/httpLogger');
 const performanceLogger = require('./middlewares/performanceLogger');
+const httpRequestTracker = require('./middlewares/httpRequestTracker');
 require('./models/user.model');
 require('./models/news.model');
 
 dbService.connect()
   .then(() => {
-    sequelize.sync({ force: true })
+    sequelize.sync({ alter: true })
       .then(() => console.log('Database synced'))
       .catch(() => console.log('Database sync failed'));
     // Database connected successfully
@@ -23,6 +24,7 @@ dbService.connect()
     }));
     app.use(httpLogger);
     app.use(performanceLogger);
+    app.use(httpRequestTracker)
     app.use(express.json());
     app.use(responseFormatter);
     app.use("/api", routes);
