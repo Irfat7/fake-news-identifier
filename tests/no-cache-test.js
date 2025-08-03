@@ -81,7 +81,7 @@ export default function () {
 
     const headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiOTBmN2MwOS0wZTkyLTQ3OTUtYjY3Ny1iNDM5ZmU0NjliYWIiLCJlbWFpbCI6ImltaXJmYXQ3QGdtYWlsLmNvbSIsImlhdCI6MTc1MzcyMDM0NywiZXhwIjoxNzUzNzIzOTQ3fQ.eYiPido_4pqRPyJ-EGB7_rhmekbZVZJy9Q7FfT6UtUc'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MjY5YjdmNC04YmZkLTQ5M2EtYTVhMi01NjQ4M2MyNDRkZDQiLCJlbWFpbCI6ImltaXJmYXQ3QGdtYWlsLmNvbSIsImlhdCI6MTc1NDIxNDQ5OCwiZXhwIjoxNzU0MjE4MDk4fQ.s_mceKj6p04DST5YAxsAZ2DEO0tEr23mwfXBXgf_09g'
     };
 
     const startTime = Date.now();

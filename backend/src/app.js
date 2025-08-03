@@ -9,6 +9,7 @@ const cors = require('cors');
 const httpLogger = require('./middlewares/httpLogger');
 const performanceLogger = require('./middlewares/performanceLogger');
 const httpRequestTracker = require('./middlewares/httpRequestTracker');
+const { totalPredictions, feedbackTotal } = require('./utils/metrics');
 require('./models/user.model');
 require('./models/news.model');
 
@@ -18,6 +19,10 @@ dbService.connect()
       .then(() => console.log('Database synced'))
       .catch(() => console.log('Database sync failed'));
     // Database connected successfully
+    setInterval(() => {
+      totalPredictions.inc(0);
+      feedbackTotal.inc(0);
+    }, 60 * 1000);
     app.use(cors({
       origin: 'http://localhost:5173', // your frontend's URL
       credentials: true               // if you're using cookies or auth headers

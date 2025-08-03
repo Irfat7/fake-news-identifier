@@ -1,6 +1,7 @@
 const client = require('prom-client');
 client.collectDefaultMetrics();
 
+
 const totalPredictions = new client.Counter({
     name: 'total_predictions',
     help: 'Total number of predictions served',
