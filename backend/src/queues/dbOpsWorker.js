@@ -1,8 +1,7 @@
 const { Worker } = require('bullmq');
-const connection = require('../config/redisConnection');
+const { bullMQRedis } = require('../config/redisConnection');
 const News = require('../models/news.model');
 const sequelize = require('../config/db');
-
 
 sequelize.authenticate()
     .then(() => console.log('DB connected in worker'))
@@ -17,7 +16,7 @@ const dbOpsWorker = new Worker('db-ops-queue', async job => {
     }
 
 }, {
-    connection
+    connection: bullMQRedis
 });
 
 dbOpsWorker.on('failed', (job, err) => {

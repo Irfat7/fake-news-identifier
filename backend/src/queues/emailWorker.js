@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Worker } = require('bullmq');
 const transporter = require('../utils/email');
-const connection = require('../config/redisConnection');
+const { bullMQRedis } = require('../config/redisConnection');
 
 const emailWorker = new Worker('emailQueue', async job => {
     const { from, to, subject, text, html } = job.data;
@@ -15,7 +15,7 @@ const emailWorker = new Worker('emailQueue', async job => {
     });
 
 }, {
-    connection
+    connection: bullMQRedis
 });
 
 emailWorker.on('failed', (job, err) => {

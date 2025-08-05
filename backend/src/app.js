@@ -15,6 +15,7 @@ require('./models/news.model');
 
 dbService.connect()
   .then(() => {
+    console.log("Redis connections established");
     sequelize.sync({ alter: true })
       .then(() => console.log('Database synced'))
       .catch(() => console.log('Database sync failed'));
