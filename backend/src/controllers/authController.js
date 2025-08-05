@@ -5,12 +5,27 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const emailQueue = require("../queues/emailQueue");
+const { rateLimiterRedis } = require('../config/redisConnection');
 
 const signToken = (email, userId = null) => {
     return jwt.sign({ userId, email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
 const sendVerificationMail = async (email) => {
+    const redisKey = `verify_mail_sent:${email}`;
+    const ttl = await rateLimiterRedis.ttl(redisKey);
+
+    if (ttl > 0) {
+        const minutes = Math.ceil(ttl / 60);
+        const seconds = ttl % 60;
+        const timeStr = minutes > 0 ? `${minutes} minute(s)` : `${seconds} second(s)`;
+
+        const error = new Error(`Verification mail already sent. Try again after ${timeStr}.`);
+        error.statusCode = 429;
+        throw error;
+    }
+
+    const token = signToken(email);
     /* const verifyLink = `http://localhost:5000/api/auth/verify/${signToken(email)}`;
 
     await emailQueue.add('sendVerification', {
@@ -20,6 +35,7 @@ const sendVerificationMail = async (email) => {
         text: "Verification mail",
         html: `<p>Please verify your email by clicking <a href="${verifyLink}">here</a></p>`,
     }); */
+    await rateLimiterRedis.set(redisKey, 'sent', 'EX', 600); // Set 10 minutes TTL
 };
 
 // ======================= SIGN IN ==========================
@@ -32,7 +48,11 @@ const signin = catchAsync(async (req, res) => {
     }
 
     if (!existingUser.verified) {
-        await sendVerificationMail(email);
+        try {
+            await sendVerificationMail(email);
+        } catch (error) {
+            return res.error(error.statusCode || 429, error.message);
+        }
         return res.error(403, "Email not verified. Verification mail sent.");
     }
 
@@ -59,7 +79,11 @@ const signup = catchAsync(async (req, res) => {
 
     if (existingUser) {
         if (!existingUser.verified) {
-            await sendVerificationMail(email);
+            try {
+                await sendVerificationMail(email);
+            } catch (error) {
+                return res.error(error.statusCode || 429, error.message);
+            }
             return res.success({ mail_sent: true, reason: "resend" }, 200, "Email not verified. Verification mail resent.");
         }
         return res.error(409, "Email already in use.");
