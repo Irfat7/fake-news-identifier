@@ -2,21 +2,15 @@ require('dotenv').config()
 const IORedis = require('ioredis');
 
 const rateLimiterRedis = new IORedis(process.env.REDIS_URL, {
-    maxRetriesPerRequest: 2,
-    retryDelayOnFailover: 50,
-    enableReadyCheck: true,
-    maxLoadingTimeout: 5000,
-    lazyConnect: false,
-    connectTimeout: 5000,
-    commandTimeout: 2000,
-    keepAlive: 30000,
-    family: 4,
-    reconnectOnError: (err) => {
-        const targetError = 'READONLY';
-        return err.message.includes(targetError);
-    },
-    db: 0,
-    enableAutoPipelining: true
+    enableReadyCheck: true,       // Wait for Redis to be ready
+    connectTimeout: 5000,         // Timeout for initial connection
+    commandTimeout: 1000,         // Limit each command execution to 1s
+    maxRetriesPerRequest: 1,      // Try only once per request
+    retryDelayOnFailover: 100,    // Delay between reconnects
+    enableAutoPipelining: true,   // Improve performance under load
+    enableOfflineQueue: false,    // Don't queue commands while offline
+    lazyConnect: false,           // Fail fast if not connected at startup
+    db: 0                         // Use default DB
 });
 
 const bullMQRedis = new IORedis(process.env.REDIS_URL, {

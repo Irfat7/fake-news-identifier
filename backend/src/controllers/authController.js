@@ -41,7 +41,7 @@ const signin = catchAsync(async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Lax',
-        maxAge: 60 * 60 * 1000 // 1 hour
+        maxAge: 60 * 60 * 1000
     });
 
     return res.success(
@@ -89,7 +89,6 @@ const verifyToken = catchAsync(async (req, res) => {
 // ======================= VERIFY ACCESS TOKEN ==========================
 const verify = catchAsync(async (req, res) => {
     const authHeader = req.headers.authorization;
-    console.log(authHeader)
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.error(401, "Unauthorized: No token provided.");
