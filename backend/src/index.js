@@ -2,6 +2,7 @@ const app = require('./app');
 const dbService = require('./services/db.service');
 const sequelize = require('./config/db');
 const { totalPredictions, feedbackTotal } = require('./utils/metrics');
+require('dotenv').config()
 
 const PORT = process.env.PORT || 5000;
 
@@ -22,7 +23,7 @@ async function startServer() {
 
         // Start Express server
         app.listen(PORT, () => {
-            console.log(`🚀 Server listening on http://localhost:${PORT}`);
+            console.log(`🚀 Server running on ${process.env.EXPRESS_URL}`);
         });
 
     } catch (err) {
