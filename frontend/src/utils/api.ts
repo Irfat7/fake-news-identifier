@@ -38,7 +38,7 @@ export const predictNews = async (newsText: string): Promise<PredictionResponse>
     throw new Error('Authentication required');
   }
 
-  const response = await fetch(`${API_BASE}/model/predict`, {
+  const response = await fetch(`${API_BASE}model/predict`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ export const submitFeedback = async (news: string, label: boolean, predictionTok
     throw new Error('Authentication required');
   }
 
-  const response = await fetch(`${API_BASE}/model/feedback`, {
+  const response = await fetch(`${API_BASE}model/feedback`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ export const submitFeedback = async (news: string, label: boolean, predictionTok
 };
 
 export const login = async (email: string, password: string): Promise<AuthResponse> => {
-  const response = await fetch(`${API_BASE}/auth/signin`, {
+  const response = await fetch(`${API_BASE}auth/signin`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ export const login = async (email: string, password: string): Promise<AuthRespon
 };
 
 export const signup = async (name: string, email: string, password: string): Promise<AuthResponse> => {
-  const response = await fetch(`${API_BASE}/auth/signup`, {
+  const response = await fetch(`${API_BASE}auth/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export const verifyToken = async (): Promise<{ valid: boolean; user?: any }> => 
   }
 
   try {
-    const response = await fetch(`${API_BASE}/auth/verify-token`, {
+    const response = await fetch(`${API_BASE}auth/verify-token`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
