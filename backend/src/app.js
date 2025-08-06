@@ -18,12 +18,12 @@ app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true
 }));
+app.use(responseFormatter);
 app.use(generalRateLimit)
 app.use(httpLogger);
 app.use(performanceLogger);
 app.use(httpRequestTracker);
 app.use(express.json());
-app.use(responseFormatter);
 app.use('/api', routes);
 app.use(globalErrorHandler);
 
