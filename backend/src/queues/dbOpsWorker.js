@@ -19,6 +19,12 @@ const dbOpsWorker = new Worker('db-ops-queue', async job => {
     connection: bullMQRedis
 });
 
+dbOpsWorker.on('ready', () => {
+    console.log('Database Worker is ready and connected to Redis.');
+});
+
 dbOpsWorker.on('failed', (job, err) => {
     console.error(`Db job failed ${job.id}:`, err);
 });
+
+module.exports = dbOpsWorker

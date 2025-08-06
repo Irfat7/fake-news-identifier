@@ -18,6 +18,12 @@ const emailWorker = new Worker('emailQueue', async job => {
     connection: bullMQRedis
 });
 
+emailWorker.on('ready', () => {
+    console.log('Email Worker is ready and connected to Redis.');
+});
+
 emailWorker.on('failed', (job, err) => {
     console.error(`Email job failed for ${job.id}:`, err);
 });
+
+module.exports = emailWorker

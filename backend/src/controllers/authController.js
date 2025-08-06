@@ -25,7 +25,6 @@ const sendVerificationMail = async (email) => {
         throw error;
     }
 
-    const token = signToken(email);
     const verifyLink = `http://localhost:5000/api/auth/verify/${signToken(email)}`;
 
     await emailQueue.add('sendVerification', {
