@@ -16,8 +16,15 @@ require('./models/news.model');
 
 // Middlewares (synchronous setup)
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
+  origin: (origin, callback) => {
+    const allowedOrigin = process.env.FRONTEND_URL.replace(/\/$/, '');
+    if (origin === allowedOrigin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
 app.use(responseFormatter);
 app.use(generalRateLimit)
