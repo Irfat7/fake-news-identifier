@@ -72,8 +72,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ onSuccess, onError, onEmailVerifica
           onError(response.message || 'Authentication failed');
         }
       }
-    } catch (error) {
-      onError('Network error. Please try again.');
+    } catch (error: any) {
+      console.error(error)
+      onError(error?.message || 'Network error. Please try again.');
     } finally {
       setIsLoading(false);
     }

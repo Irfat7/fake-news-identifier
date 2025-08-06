@@ -8,6 +8,7 @@ const httpLogger = require('./middlewares/httpLogger');
 const performanceLogger = require('./middlewares/performanceLogger');
 const httpRequestTracker = require('./middlewares/httpRequestTracker');
 const { generalRateLimit } = require('./middlewares/rateLimiter');
+require('dotenv').config()
 
 // Load models to register with Sequelize
 require('./models/user.model');
@@ -15,7 +16,7 @@ require('./models/news.model');
 
 // Middlewares (synchronous setup)
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.FRONTEND_URL,
   credentials: true
 }));
 app.use(responseFormatter);
