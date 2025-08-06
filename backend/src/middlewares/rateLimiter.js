@@ -13,7 +13,7 @@ const createRateLimiter = (keyPrefix, points, duration, blockDuration = duration
 }
 
 const allRateLimiters = {
-    signin: createRateLimiter('signin', 5, 60, 30), // 5 attempts per minute, block for 5 minutes
+    signin: createRateLimiter('signin', 5, 60, 300), // 5 attempts per minute, block for 5 minutes
     prediction: createRateLimiter('prediction', 20, 60),
     feedback: createRateLimiter('feedback', 5, 86400),
     general: createRateLimiter('general', 100, 60),
@@ -57,7 +57,7 @@ const createRateLimitMiddleware = (limiterType) => {
                 });
 
                 res.set('Retry-After', String(secs));
-                return res.error(429, "Too many requests");
+                return res.error(429, "Too many requests. Please try again later");
             }
             if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND' || error.code === 'ETIMEDOUT') {
                 logger.error('Redis connection error in rate limiter', {

@@ -1,0 +1,30 @@
+# Dependency directories
+node_modules
+.bolt
+
+# Build output (if you're mounting or copying instead of building inside container)
+dist
+build
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*.local
+
+# Editor settings
+.vscode
+.idea
+
+# Git and Docker
+.git
+.gitignore
+Dockerfile*
+.dockerignore
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

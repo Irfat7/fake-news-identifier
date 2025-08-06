@@ -26,7 +26,7 @@ const sendVerificationMail = async (email) => {
     }
 
     const token = signToken(email);
-    /* const verifyLink = `http://localhost:5000/api/auth/verify/${signToken(email)}`;
+    const verifyLink = `http://localhost:5000/api/auth/verify/${signToken(email)}`;
 
     await emailQueue.add('sendVerification', {
         from: process.env.GOOGLE_APP_USER,
@@ -34,7 +34,7 @@ const sendVerificationMail = async (email) => {
         subject: "Verify your email",
         text: "Verification mail",
         html: `<p>Please verify your email by clicking <a href="${verifyLink}">here</a></p>`,
-    }); */
+    });
     await rateLimiterRedis.set(redisKey, 'sent', 'EX', 600); // Set 10 minutes TTL
 };
 
