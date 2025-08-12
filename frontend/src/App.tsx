@@ -24,6 +24,7 @@ function App() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [emailverifyToken, setEmailverifyToken] = useState<string | null>(null);
   const [allReady, setAllReady] = useState(false);
+  const [hasCriticalError, setHasCriticalError] = useState(false);
 
   // Check authentication on app load
   useEffect(() => {
@@ -140,7 +141,7 @@ function App() {
 
   // Show loading screen while checking authentication
   if (isAuthenticating || !allReady) {
-    return <Loading allReady={allReady} setAllReady={setAllReady} />
+    return <Loading setHasCriticalError={setHasCriticalError} allReady={allReady} setAllReady={setAllReady} />
   }
 
   // Show auth form if not authenticated
@@ -152,6 +153,11 @@ function App() {
           onError={handleAuthError}
           onEmailVerificationNeeded={handleEmailVerificationNeeded}
         />
+        {hasCriticalError && (
+          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 rounded p-4 text-red-700 shadow-md z-50">
+            <strong>Critical services unavailable:</strong> Some essential services are down, likely due to free tier limitations. Please try again shortly.
+          </div>
+        )}
 
         <EmailVerificationModal
           isOpen={isEmailVerificationModalOpen}
@@ -167,6 +173,11 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100">
       {/* Header */}
       <Header user={user} onLogout={handleLogout} />
+      {hasCriticalError && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-100 border border-red-400 rounded p-4 text-red-700 shadow-md z-50">
+          <strong>Critical services unavailable:</strong> Some essential services are down, likely due to free tier limitations. Please try again shortly.
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
