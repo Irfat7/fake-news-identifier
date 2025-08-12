@@ -252,3 +252,5 @@
 {"duration":"1ms","ip":"::ffff:172.18.0.9","level":"info","message":"Request Performance","method":"GET","service":"fake-news-api","statusCode":200,"timestamp":"2025-08-12T05:32:41.403Z","type":"performance","url":"/api/metrics","userAgent":"Prometheus/3.5.0"}
 {"level":"info","message":"GET /api/metrics 200 - - 0.612 ms - User: anonymous","service":"fake-news-api","timestamp":"2025-08-12T05:32:56.401Z","type":"http"}
 {"duration":"1ms","ip":"::ffff:172.18.0.9","level":"info","message":"Request Performance","method":"GET","service":"fake-news-api","statusCode":200,"timestamp":"2025-08-12T05:32:56.401Z","type":"performance","url":"/api/metrics","userAgent":"Prometheus/3.5.0"}
+{"level":"info","message":"GET /api/metrics 200 - - 0.805 ms - User: anonymous","service":"fake-news-api","timestamp":"2025-08-12T05:33:11.399Z","type":"http"}
+{"duration":"2ms","ip":"::ffff:172.18.0.9","level":"info","message":"Request Performance","method":"GET","service":"fake-news-api","statusCode":200,"timestamp":"2025-08-12T05:33:11.400Z","type":"performance","url":"/api/metrics","userAgent":"Prometheus/3.5.0"}
