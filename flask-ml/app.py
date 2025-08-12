@@ -9,6 +9,9 @@ app = Flask(__name__)
 model = joblib.load("./model/fake_news_model.pkl")
 vectorizer = joblib.load("./model/tfidf_vectorizer.pkl")
 
+@app.route('/health')
+def health():
+    return jsonify({"status": "ok"}), 200
 
 @app.route("/predict", methods=["POST"])
 @token_required

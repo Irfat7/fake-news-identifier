@@ -11,6 +11,7 @@ import { ToastContainer } from './components/Toast';
 import { predictNews, verifyToken } from './utils/api';
 import { PredictionResult as PredictionResultType, Toast, User } from './types';
 import MailVerification from './components/MailVerification';
+import Loading from './components/Loading';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -22,6 +23,7 @@ function App() {
   const [errorModal, setErrorModal] = useState({ isOpen: false, title: '', message: '' });
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [emailverifyToken, setEmailverifyToken] = useState<string | null>(null);
+  const [allReady, setAllReady] = useState(false);
 
   // Check authentication on app load
   useEffect(() => {
@@ -137,15 +139,8 @@ function App() {
   }
 
   // Show loading screen while checking authentication
-  if (isAuthenticating) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
+  if (isAuthenticating || !allReady) {
+    return <Loading allReady={allReady} setAllReady={setAllReady} />
   }
 
   // Show auth form if not authenticated

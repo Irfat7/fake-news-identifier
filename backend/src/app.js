@@ -35,6 +35,9 @@ app.use(httpLogger);
 app.use(performanceLogger);
 app.use(httpRequestTracker);
 app.use(express.json());
+app.get("/health", (req, res) => {
+  res.success({ status: 'ok' });
+});
 app.use('/api', routes);
 app.use(globalErrorHandler);
 
