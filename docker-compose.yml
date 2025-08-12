@@ -61,7 +61,9 @@ services:
       - "8080:8080"
   
   flask-ml:
-    build: ./flask-ml
+    build:
+      context: ./flask-ml
+      dockerfile: Dockerfile.dev
     volumes:
       - ./flask-ml:/app
     ports:
