@@ -1,3 +1,0 @@
-{"level":"info","message":"POST /api/auth/signin 404 95 - 208.908 ms - User: anonymous","service":"fake-news-api","timestamp":"2025-08-01T16:32:22.484Z","type":"http"}
-{"level":"info","message":"POST /api/auth/signin 404 95 - 100.293 ms - User: anonymous","service":"fake-news-api","timestamp":"2025-08-01T16:43:07.482Z","type":"http"}
-{"duration":"102ms","ip":"::ffff:172.18.0.1","level":"info","message":"Request Performance","method":"POST","service":"fake-news-api","statusCode":404,"timestamp":"2025-08-01T16:43:07.483Z","type":"performance","url":"/api/auth/signin","userAgent":"PostmanRuntime/7.44.1"}

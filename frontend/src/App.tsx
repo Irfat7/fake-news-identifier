@@ -10,6 +10,7 @@ import EmailVerificationModal from './components/EmailVerificationModal';
 import { ToastContainer } from './components/Toast';
 import { predictNews, verifyToken } from './utils/api';
 import { PredictionResult as PredictionResultType, Toast, User } from './types';
+import MailVerification from './components/MailVerification';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -20,9 +21,16 @@ function App() {
   const [isEmailVerificationModalOpen, setIsEmailVerificationModalOpen] = useState(false);
   const [errorModal, setErrorModal] = useState({ isOpen: false, title: '', message: '' });
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [emailverifyToken, setEmailverifyToken] = useState<string | null>(null);
 
   // Check authentication on app load
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromUrl = params.get('token')
+    setEmailverifyToken(tokenFromUrl);
+    if (!tokenFromUrl) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
     const checkAuth = async () => {
       try {
         const { valid, user: userData } = await verifyToken();
@@ -103,6 +111,30 @@ function App() {
     setResult(null);
     addToast('Successfully signed out', 'info');
   };
+
+  const handleMailVerificationSuccess = useCallback(
+    (message: string) => addToast(message, 'success'),
+    [addToast]
+  );
+
+  const handleMailVerificationError = useCallback(
+    (message: string) => addToast(message, 'error'),
+    [addToast]
+  );
+
+  // If there's a token in URL, show verification component
+  if (emailverifyToken) {
+    return (
+      <>
+        <MailVerification
+          emailVeifyToken={emailverifyToken}
+          onSuccess={handleMailVerificationSuccess}
+          onError={handleMailVerificationError}
+        />
+        <ToastContainer toasts={toasts} onRemove={removeToast} />
+      </>
+    );
+  }
 
   // Show loading screen while checking authentication
   if (isAuthenticating) {

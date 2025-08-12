@@ -15,7 +15,9 @@ require('./models/user.model');
 require('./models/news.model');
 
 // Middlewares (synchronous setup)
-app.use(cors({
+app.use(responseFormatter);
+
+/* app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigin = process.env.FRONTEND_URL.replace(/\/$/, '');
     if (origin === allowedOrigin) {
@@ -25,8 +27,9 @@ app.use(cors({
     }
   },
   credentials: true,
-}));
-app.use(responseFormatter);
+})); */
+app.use(cors());
+
 app.use(generalRateLimit)
 app.use(httpLogger);
 app.use(performanceLogger);

@@ -137,3 +137,24 @@ export const verifyToken = async (): Promise<{ valid: boolean; user?: any }> => 
     return { valid: false };
   }
 };
+
+export const emailVerification = async (token: string): Promise<{ valid: boolean }> => {
+
+  if (!token) {
+    return { valid: false };
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}auth/verify/${token}`, {
+      method: 'GET'
+    });
+
+    if (response.ok) {
+      return { valid: true };
+    } else {
+      return { valid: false };
+    }
+  } catch (error) {
+    return { valid: false };
+  }
+};

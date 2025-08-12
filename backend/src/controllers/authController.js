@@ -25,7 +25,7 @@ const sendVerificationMail = async (email) => {
         throw error;
     }
 
-    const verifyLink = `${process.env.EXPRESS_URL}api/auth/verify/${signToken(email)}`;
+    const verifyLink = `${process.env.FRONTEND_URL.replace(/\/$/, '')}?token=${signToken(email)}`;
 
     await emailQueue.add('sendVerification', {
         from: process.env.GOOGLE_APP_USER,
