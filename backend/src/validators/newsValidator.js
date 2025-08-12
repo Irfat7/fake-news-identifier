@@ -6,7 +6,7 @@ const newsValidator = [
         .notEmpty().withMessage('News is required')
         .isString().withMessage('News must be a string')
         .isLength({ min: 10 }).withMessage('News must be at least 10 characters')
-        .isLength({ max: 1000 }).withMessage('News must not exceed 1000 characters'),
+        .isLength({ max: 10000 }).withMessage('News must not exceed 1000 characters'),
 ];
 
 const feedbackValidator = [
