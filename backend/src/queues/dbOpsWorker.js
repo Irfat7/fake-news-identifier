@@ -27,4 +27,8 @@ dbOpsWorker.on('failed', (job, err) => {
     console.error(`Db job failed ${job.id}:`, err);
 });
 
+dbOpsWorker.on('completed', (job) => {
+    console.log(`✅ Job ${job.id} completed successfully. Task: ${job.name || job.data.task}`);
+});
+
 module.exports = dbOpsWorker
