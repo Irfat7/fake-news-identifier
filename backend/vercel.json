@@ -6,7 +6,9 @@
             "use": "@vercel/node",
             "config": {
                 "includeFiles": [
-                    "node_modules/pg/**"
+                    "node_modules/**",
+                    "src/**",
+                    "package.json"
                 ]
             }
         }
@@ -16,5 +18,10 @@
             "src": "/(.*)",
             "dest": "src/index.js"
         }
-    ]
+    ],
+    "functions": {
+        "src/index.js": {
+            "maxDuration": 30
+        }
+    }
 }
