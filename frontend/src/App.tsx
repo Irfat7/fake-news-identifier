@@ -140,9 +140,9 @@ function App() {
   }
 
   // Show loading screen while checking authentication
-/*   if (isAuthenticating || !allReady) {
+  if (isAuthenticating || !allReady) {
     return <Loading setHasCriticalError={setHasCriticalError} allReady={allReady} setAllReady={setAllReady} />
-  } */
+  }
 
   // Show auth form if not authenticated
   if (!user) {
