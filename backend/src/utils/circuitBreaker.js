@@ -20,7 +20,16 @@ class CircuitBreaker {
             this.onSuccess();
             return result;
         } catch (error) {
-            this.onFailure();
+            const status =
+                (error.response && error.response.status) || // Axios HTTP errors
+                error.status ||                              // Custom errors
+                error.statusCode ||                          // Node HTTP errors
+                null;
+
+            // Treat 5xx and network errors as breaker triggers
+            if ((status && status >= 500) || error.code === 'ECONNREFUSED' || error.code === 'ETIMEDOUT') {
+                this.onFailure();
+            }
             throw error;
         }
     }
