@@ -1,27 +1,16 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "src/index.js",
-            "use": "@vercel/node",
-            "config": {
-                "includeFiles": [
-                    "node_modules/**",
-                    "src/**",
-                    "package.json"
-                ]
-            }
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "src/index.js"
-        }
-    ],
     "functions": {
         "src/index.js": {
-            "maxDuration": 30
+            "runtime": "nodejs18.x",
+            "maxDuration": 30,
+            "memory": 1024
         }
-    }
+    },
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/src/index.js"
+        }
+    ]
 }
